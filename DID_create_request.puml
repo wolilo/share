@@ -1,0 +1,22 @@
+@startuml
+actor Alice
+actor Bob
+actor TrustAnchor
+collections Nodes
+database Ledger
+
+== create new ID in Indy ==
+Alice -> Alice : Create Identity (DID) \n including Public and Private Keys
+Alice -> TrustAnchor: Send request including (DID)
+note left: To access the current Sovrin Network, \n the request has to be sent by Email
+TrustAnchor -> TrustAnchor: Validate incoming Request
+TrustAnchor -> Nodes: send a request for \n new ID
+Nodes -> Nodes: come to consent using BFT
+Nodes -> Ledger: write DID to Identity Ledger
+
+== request ID form Indy ==
+Bob -> Nodes: Request Alice's DID
+Nodes -> Ledger: Look for Alice's DID on Ledger
+Ledger -> Nodes: Response with DID \n (including public Key and public Attributes)
+Nodes -> Bob: Response with Alice's DID
+@enduml
